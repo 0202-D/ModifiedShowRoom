@@ -1,3 +1,6 @@
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
+
 /**
  * @author Dm.Petrov
  * DATE: 14.09.2022
@@ -5,14 +8,15 @@
 public class Main {
     public static void main(String[] args) {
         CarShowRoom carShowRoom = new CarShowRoom();
-        Thread consumer = new Consumer(carShowRoom);
-        consumer.setName("Consumer1");
-        Thread consumer2 = new Consumer(carShowRoom);
-        consumer2.setName("Consumer2");
+        Lock lock = new ReentrantLock();
         Thread producer = new Producer(carShowRoom);
-        consumer.start();
-        consumer2.start();
+        for (int i = 1; i <= 10; i++) {
+            new Thread(()->new Consumer(carShowRoom,lock).buy(),"Customer "+i).start();
+        }
         producer.start();
+
+
+
 
     }
 }

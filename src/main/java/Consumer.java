@@ -1,21 +1,21 @@
 import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
 
 /**
  * @author Dm.Petrov
  * DATE: 14.09.2022
  */
-public class Consumer extends Thread {
+public class Consumer {
     CarShowRoom carShowRoom;
-    public Consumer(CarShowRoom carShowRoom) {
+    Lock lock;
+    public Consumer(CarShowRoom carShowRoom,Lock lock) {
         this.carShowRoom = carShowRoom;
+        this.lock = lock;
     }
 
-    @Override
-    public void run() {
-        for (int i = 0; i < 5; i++) {
+    public void buy() {
+            lock.lock();
             carShowRoom.buyAuto();
+            lock.unlock();
         }
-
     }
-}
+
