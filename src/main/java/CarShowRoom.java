@@ -17,7 +17,6 @@ public class CarShowRoom {
     Condition condition = lock.newCondition();
 
     public void releaseAuto() {
-        lock.lock();
         try {
             Thread.sleep(timeToCreateAuto);
         } catch (InterruptedException ex) {
@@ -25,13 +24,14 @@ public class CarShowRoom {
         }
         System.out.println("Toyota release auto");
         list.add(new Car());
-        condition.signal();
+        lock.lock();
+        condition.signalAll();
         System.out.println(list.size() + " car in storage");
         lock.unlock();
     }
 
 
-    public synchronized void buyAuto() {
+    public void buyAuto() {
         lock.lock();
         System.out.println(Thread.currentThread().getName() + " came to the salon");
         try {
@@ -49,6 +49,7 @@ public class CarShowRoom {
             lock.unlock();
         }
     }
+
 
 }
 
